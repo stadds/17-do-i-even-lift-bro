@@ -5,21 +5,16 @@ const Schema = mongoose.Schema;
 const WorkoutSchema = new Schema({
   day: {
     type: Date,
+    default: Date.now,
+    required: "Must have a date",
   },
-
-  // exercises: [
-  //   {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "Exercise",
-  //   },
-  // ],
   exercises: [],
 });
 
 WorkoutSchema.methods.setTotalDuration = function () {
   this.totalDuration = 0;
 
-  this.exercises.forEach(exercise => {
+  this.exercises.forEach((exercise) => {
     totalDuration += exercise.totalDuration;
   });
 };
