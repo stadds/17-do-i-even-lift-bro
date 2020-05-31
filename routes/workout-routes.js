@@ -8,24 +8,6 @@ router.get("/api/workouts", (req, res) => {
     .sort({ _id: -1 })
     .limit(-1)
     .then((dbWorkout) => {
-      console.log(dbWorkout);
-      let result = dbWorkout[0];
-      const resultArr = result.exercises;
-
-      console.log("print result");
-      console.log(result);
-      console.log(resultArr);
-
-      let sumDuration = 0;
-
-      resultArr.forEach((exercise) => {
-        sumDuration += exercise.duration;
-      });
-      console.log(sumDuration);
-
-      result.totalDuration = sumDuration;
-      console.log(result);
-
       res.json(dbWorkout);
     })
     .catch((err) => {
@@ -34,13 +16,14 @@ router.get("/api/workouts", (req, res) => {
 });
 
 router.put("/api/workouts/:id", (req, res) => {
-  console.log("in workout/:id  : " + req.params.id + ",  " + req.body);
+  console.log("in workout/:id  : " + req.params.id + ",  " + req.body.duration);
 
   db.Workout.updateOne(
     {
       _id: req.params.id,
     },
     {
+      $inc: { totalDuration: req.body.duration },
       $push: { exercises: req.body },
     }
   )
@@ -53,7 +36,7 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 router.post("/api/workouts", ({ body }, res) => {
-  console.log("post workouts " + body);
+  console.log("post workouts " + body.duration);
 
   db.Workout.create(body)
     .then((dbWorkout) => {
