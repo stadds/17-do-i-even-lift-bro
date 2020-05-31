@@ -8,6 +8,24 @@ router.get("/api/workouts", (req, res) => {
     .sort({ _id: -1 })
     .limit(-1)
     .then((dbWorkout) => {
+      console.log(dbWorkout);
+      let result = dbWorkout[0];
+      const resultArr = result.exercises;
+
+      console.log("print result");
+      console.log(result);
+      console.log(resultArr);
+
+      let sumDuration = 0;
+
+      resultArr.forEach((exercise) => {
+        sumDuration += exercise.duration;
+      });
+      console.log(sumDuration);
+
+      result.totalDuration = sumDuration;
+      console.log(result);
+
       res.json(dbWorkout);
     })
     .catch((err) => {
